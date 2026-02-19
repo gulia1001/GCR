@@ -1,0 +1,17 @@
+[2026-02-19T10:35:15.388+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: risk_analysis_v1.etl_process manual__2026-02-19T10:35:13.304825+00:00 [queued]>
+[2026-02-19T10:35:15.399+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: risk_analysis_v1.etl_process manual__2026-02-19T10:35:13.304825+00:00 [queued]>
+[2026-02-19T10:35:15.399+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 1
+[2026-02-19T10:35:15.414+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): etl_process> on 2026-02-19 10:35:13.304825+00:00
+[2026-02-19T10:35:15.426+0000] {standard_task_runner.py:60} INFO - Started process 122 to run task
+[2026-02-19T10:35:15.431+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'risk_analysis_v1', 'etl_process', 'manual__2026-02-19T10:35:13.304825+00:00', '--job-id', '2', '--raw', '--subdir', 'DAGS_FOLDER/pipeline.py', '--cfg-path', '/tmp/tmps8kp8usx']
+[2026-02-19T10:35:15.435+0000] {standard_task_runner.py:88} INFO - Job 2: Subtask etl_process
+[2026-02-19T10:35:15.508+0000] {task_command.py:423} INFO - Running <TaskInstance: risk_analysis_v1.etl_process manual__2026-02-19T10:35:13.304825+00:00 [running]> on host 134557eaf6ed
+[2026-02-19T10:35:15.610+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='risk_analysis_v1' AIRFLOW_CTX_TASK_ID='etl_process' AIRFLOW_CTX_EXECUTION_DATE='2026-02-19T10:35:13.304825+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-02-19T10:35:13.304825+00:00'
+[2026-02-19T10:35:15.612+0000] {etl_logic.py:24} INFO - Reading local CSV...
+[2026-02-19T10:35:15.654+0000] {etl_logic.py:37} INFO - Fetching World Bank Data...
+[2026-02-19T10:35:19.824+0000] {etl_logic.py:46} INFO - ETL Complete. Rows: 6431
+[2026-02-19T10:35:23.906+0000] {s3_tools.py:31} INFO - Uploaded data/processed_risk_data.parquet to S3
+[2026-02-19T10:35:23.908+0000] {python.py:201} INFO - Done. Returned value was: None
+[2026-02-19T10:35:23.919+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=risk_analysis_v1, task_id=etl_process, execution_date=20260219T103513, start_date=20260219T103515, end_date=20260219T103523
+[2026-02-19T10:35:23.968+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-02-19T10:35:23.995+0000] {taskinstance.py:3280} INFO - 3 downstream tasks scheduled from follow-on schedule check

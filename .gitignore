@@ -1,0 +1,16 @@
+# Secrets and environments (Crucial!)
+.env
+venv/
+env/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Docker and OS files
+.DS_Store
+
+# Datasets or heavy files (if you have them)
+# *.csv
+# *.json
+# data/

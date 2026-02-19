@@ -1,0 +1,12 @@
+FROM python:3.9-slim
+WORKDIR /app
+
+# Установка зависимостей
+COPY app/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Копирование кода
+COPY app/ .
+
+# Запуск через python -m (так команда 100% найдется)
+CMD ["python", "-m", "streamlit", "run", "main.py", "--server.port=8501", "--server.address=0.0.0.0"]

@@ -1,0 +1,8 @@
+streamlit
+pandas
+plotly
+boto3
+joblib
+scikit-learn
+pyarrow
+dill

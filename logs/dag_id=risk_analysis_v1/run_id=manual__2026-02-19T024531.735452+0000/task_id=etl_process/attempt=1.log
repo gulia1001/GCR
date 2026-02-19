@@ -1,0 +1,45 @@
+[2026-02-19T02:45:34.712+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: risk_analysis_v1.etl_process manual__2026-02-19T02:45:31.735452+00:00 [queued]>
+[2026-02-19T02:45:34.723+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: risk_analysis_v1.etl_process manual__2026-02-19T02:45:31.735452+00:00 [queued]>
+[2026-02-19T02:45:34.724+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 1
+[2026-02-19T02:45:34.739+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): etl_process> on 2026-02-19 02:45:31.735452+00:00
+[2026-02-19T02:45:34.751+0000] {standard_task_runner.py:60} INFO - Started process 143 to run task
+[2026-02-19T02:45:34.757+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'risk_analysis_v1', 'etl_process', 'manual__2026-02-19T02:45:31.735452+00:00', '--job-id', '2', '--raw', '--subdir', 'DAGS_FOLDER/pipeline.py', '--cfg-path', '/tmp/tmp5frds8ax']
+[2026-02-19T02:45:34.760+0000] {standard_task_runner.py:88} INFO - Job 2: Subtask etl_process
+[2026-02-19T02:45:34.824+0000] {task_command.py:423} INFO - Running <TaskInstance: risk_analysis_v1.etl_process manual__2026-02-19T02:45:31.735452+00:00 [running]> on host c1be1424ca2a
+[2026-02-19T02:45:34.923+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='risk_analysis_v1' AIRFLOW_CTX_TASK_ID='etl_process' AIRFLOW_CTX_EXECUTION_DATE='2026-02-19T02:45:31.735452+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-02-19T02:45:31.735452+00:00'
+[2026-02-19T02:45:34.925+0000] {etl_logic.py:24} INFO - Reading local CSV...
+[2026-02-19T02:45:34.966+0000] {etl_logic.py:37} INFO - Fetching World Bank Data...
+[2026-02-19T02:45:35.699+0000] {etl_logic.py:46} INFO - ETL Complete. Rows: 6431
+[2026-02-19T02:45:36.984+0000] {taskinstance.py:2698} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 433, in _execute_task
+    result = execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 199, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 216, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/pipeline.py", line 15, in etl_task
+    upload_df_parquet(df, 'data/processed_risk_data.parquet')
+  File "/opt/airflow/src/s3_tools.py", line 23, in upload_df_parquet
+    s3.upload_fileobj(buffer, bucket, key)
+  File "/home/airflow/.local/lib/python3.8/site-packages/boto3/s3/inject.py", line 642, in upload_fileobj
+    return future.result()
+  File "/home/airflow/.local/lib/python3.8/site-packages/s3transfer/futures.py", line 103, in result
+    return self._coordinator.result()
+  File "/home/airflow/.local/lib/python3.8/site-packages/s3transfer/futures.py", line 266, in result
+    raise self._exception
+  File "/home/airflow/.local/lib/python3.8/site-packages/s3transfer/tasks.py", line 139, in __call__
+    return self._execute_main(kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/s3transfer/tasks.py", line 162, in _execute_main
+    return_value = self._main(**kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/s3transfer/upload.py", line 764, in _main
+    client.put_object(Bucket=bucket, Key=key, Body=body, **extra_args)
+  File "/home/airflow/.local/lib/python3.8/site-packages/botocore/client.py", line 553, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/botocore/client.py", line 1009, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.exceptions.ClientError: An error occurred (InvalidAccessKeyId) when calling the PutObject operation: The AWS Access Key Id you provided does not exist in our records.
+[2026-02-19T02:45:37.010+0000] {taskinstance.py:1138} INFO - Marking task as FAILED. dag_id=risk_analysis_v1, task_id=etl_process, execution_date=20260219T024531, start_date=20260219T024534, end_date=20260219T024537
+[2026-02-19T02:45:37.032+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 2 for task etl_process (An error occurred (InvalidAccessKeyId) when calling the PutObject operation: The AWS Access Key Id you provided does not exist in our records.; 143)
+[2026-02-19T02:45:37.100+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2026-02-19T02:45:37.124+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check
