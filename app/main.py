@@ -22,7 +22,7 @@ def load_new_data():
     """Загрузка новых объединенных данных (с новыми колонками)"""
     s3 = get_s3_client()
     bucket = os.getenv('BUCKET_NAME')
-    obj = s3.get_object(Bucket=bucket, Key='data/processed_risk_data.parquet')
+    obj = s3.get_object(Bucket=bucket, Key='processed/global_risks_clean.parquet')
     return pd.read_parquet(io.BytesIO(obj['Body'].read()))
 
 @st.cache_data(ttl=3600)
@@ -31,7 +31,7 @@ def load_old_data():
     s3 = get_s3_client()
     bucket = os.getenv('BUCKET_NAME')
     # Замените на имя вашего старого файла, если он назывался иначе!
-    obj = s3.get_object(Bucket=bucket, Key='data/emdat_old_data.parquet') 
+    obj = s3.get_object(Bucket=bucket, Key='data/processed_risk_data.parquet') 
     return pd.read_parquet(io.BytesIO(obj['Body'].read()))
 
 @st.cache_resource
@@ -67,6 +67,8 @@ if page == "🌍 Версия 2.0 (Все источники)":
 
     try:
         df = load_new_data()
+        # ДОБАВЬТЕ ЭТУ СТРОЧКУ, чтобы увидеть реальные названия колонок на экране:
+        st.write("Колонки в файле:", df.columns.tolist()) 
         
         st.sidebar.header("Фильтры v2.0")
         min_year, max_year = int(df['Year'].min()), int(df['Year'].max())
