@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 import time
+from datetime import datetime
 import logging
 
 from src.s3_tools import (
@@ -48,32 +49,82 @@ def extract_all_noaa(**kwargs):
     extract_noaa_generic('tsunami', 'tsunamis_raw') 
     extract_noaa_generic('volcano', 'volcanoes_raw')
 
-def extract_aviation(**kwargs):
-    url = 'https://aviation-safety.net/database/year/2024/1'
-    logging.info(f"Парсинг Aviation Safety: {url}...")
-    response = requests.get(url, headers=HEADERS)
-    soup = BeautifulSoup(response.text, "html.parser")
+def extract_aviation(start_year=1990, end_year=None):
+    # Если конечный год не указан, берем текущий
+    if end_year is None:
+        end_year = datetime.now().year
 
-    table_headers = [th.get_text(strip=True) for th in soup.find_all("th")]
-    table_headers = [h if h != "\xa0" else f"extra_{i}" for i, h in enumerate(table_headers)]
+    all_rows = []
+    table_headers = None
 
-    rows = []
-    for tr in soup.find_all("tr", class_="list"):
-        cells = tr.find_all("td")
-        row = []
-        for td in cells:
-            link = td.find("a")
-            if link:
-                row.append(link.get_text(strip=True))
-            else:
-                img = td.find("img")
-                row.append(img["alt"] if img and img.get("alt") else td.get_text(strip=True))
-        while len(row) < len(table_headers):
-            row.append("")
-        rows.append(row)
+    for year in range(start_year, end_year + 1):
+        page = 1
+        
+        while True:
+            url = f'https://aviation-safety.net/database/year/{year}/{page}'
+            print(f"Парсинг: {year} год, страница {page} ({url})")
+            
+            response = requests.get(url, headers=HEADERS)
+            
+            if response.status_code != 200:
+                break
+                
+            soup = BeautifulSoup(response.text, "html.parser")
 
-    df = pd.DataFrame(rows, columns=table_headers)
-    upload_df_csv(df, "raw/aircraft/aviation_safety_raw.csv")
+            if table_headers is None:
+                headers = soup.find_all("th")
+                if headers:
+                    table_headers = [th.get_text(strip=True) for th in headers]
+                    table_headers = [h if h != "\xa0" and h else f"extra_{i}" for i, h in enumerate(table_headers)]
+
+            list_rows = soup.find_all("tr", class_="list")
+            
+            if not list_rows:
+                break
+                
+            for tr in list_rows:
+                cells = tr.find_all("td")
+                row = []
+                for td in cells:
+                    link = td.find("a")
+                    if link:
+                        row.append(link.get_text(strip=True))
+                    else:
+                        img = td.find("img")
+                        row.append(img["alt"] if img and img.get("alt") else td.get_text(strip=True))
+                
+                # Дополняем строку пустыми значениями, если ячеек меньше, чем колонок
+                if table_headers:
+                    while len(row) < len(table_headers):
+                        row.append("")
+                        
+                # Добавляем год (берем прямо из цикла, это надежнее)
+                row.append(year)
+                all_rows.append(row)
+            
+            # Переходим к следующей странице внутри текущего года
+            page += 1
+            
+             
+
+    # Создаем DataFrame
+    if not all_rows:
+        print("Данные не найдены!")
+        return pd.DataFrame()
+
+    # Задаем имена колонок (существующие заголовки + колонка Year)
+    columns = table_headers + ["Year"] if table_headers else [f"col_{i}" for i in range(len(all_rows[0])-1)] + ["Year"]
+    df = pd.DataFrame(all_rows, columns=columns)
+
+    # Ищем колонку с оригинальной датой (обычно первая колонка или называется 'date')
+    date_col = next((col for col in df.columns if 'date' in str(col).lower()), df.columns[0])
+
+    # Конвертируем текстовую дату в datetime.
+    # format='%d %b %Y' разбирает формат '29 Dec 2024'.
+    # errors='coerce' заменяет нечитаемые даты (типа "?? ??? 1960") на NaT, избегая остановки скрипта.
+    df['Date'] = pd.to_datetime(df[date_col], format='%d %b %Y', errors='coerce')
+
+    upload_df_csv(df, f"raw/aircraft/aviation_safety_raw.csv")
 
 # --- TRANSFORM ---
 def transform_noaa(raw_df, event_type):
@@ -159,19 +210,22 @@ def transform_gtd(raw_df):
         'Source': 'GTD'
     }).dropna(subset=['Year'])
 
+
 def transform_aviation(raw_df):
     logging.info("Трансформация данных Aviation...")
     df = raw_df.copy()
     
+    # Все колонки переводятся в нижний регистр (Year -> year, Date -> date и т.д.)
     df.columns = df.columns.str.strip().str.lower()
     
+    # Извлекаем дату. Ищем 'date', так как мы уже привели все к нижнему регистру
     date_series = df.get('date', pd.Series(pd.NaT, index=df.index))
     df['Date'] = pd.to_datetime(date_series, errors='coerce')
     
+    fat_col = "fat."
     
-    fat_col = 'fat.' if 'fat.' in df.columns else ('fatalities' if 'fatalities' in df.columns else None)
-    
-    if fat_col:
+    # Безопасная проверка наличия колонки
+    if fat_col in df.columns:
         fatalities = pd.to_numeric(df[fat_col].astype(str).str.extract(r'(\d+)')[0], errors='coerce').fillna(0)
     else:
         fatalities = pd.Series(0, index=df.index)
@@ -186,6 +240,7 @@ def transform_aviation(raw_df):
         'Houses Destroyed': 0.0,
         'Source': 'Aviation Safety Network'
     }).dropna(subset=['Year'])
+
 
 # --- LOAD ---
 def transform_and_load_processed(**kwargs):

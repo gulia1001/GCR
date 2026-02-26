@@ -1,0 +1,52 @@
+[2026-02-26T08:13:09.990+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: risk_analysis_v1.extract_noaa_all manual__2026-02-26T08:13:06.860929+00:00 [queued]>
+[2026-02-26T08:13:10.005+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: risk_analysis_v1.extract_noaa_all manual__2026-02-26T08:13:06.860929+00:00 [queued]>
+[2026-02-26T08:13:10.006+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 1
+[2026-02-26T08:13:10.032+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): extract_noaa_all> on 2026-02-26 08:13:06.860929+00:00
+[2026-02-26T08:13:10.048+0000] {standard_task_runner.py:60} INFO - Started process 168 to run task
+[2026-02-26T08:13:10.053+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'risk_analysis_v1', 'extract_noaa_all', 'manual__2026-02-26T08:13:06.860929+00:00', '--job-id', '2', '--raw', '--subdir', 'DAGS_FOLDER/pipeline.py', '--cfg-path', '/tmp/tmpqc_qd8x3']
+[2026-02-26T08:13:10.057+0000] {standard_task_runner.py:88} INFO - Job 2: Subtask extract_noaa_all
+[2026-02-26T08:13:10.147+0000] {task_command.py:423} INFO - Running <TaskInstance: risk_analysis_v1.extract_noaa_all manual__2026-02-26T08:13:06.860929+00:00 [running]> on host 9398111d8ebf
+[2026-02-26T08:13:10.294+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='risk_analysis_v1' AIRFLOW_CTX_TASK_ID='extract_noaa_all' AIRFLOW_CTX_EXECUTION_DATE='2026-02-26T08:13:06.860929+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-02-26T08:13:06.860929+00:00'
+[2026-02-26T08:13:10.298+0000] {gulia_part.py:31} INFO - Начинаем выгрузку NOAA: earthquake...
+[2026-02-26T08:14:29.013+0000] {s3_tools.py:46} INFO - ✅ Uploaded CSV to s3://jasonstatham/raw/noaa/earthquakes_raw.csv
+[2026-02-26T08:14:29.031+0000] {gulia_part.py:31} INFO - Начинаем выгрузку NOAA: tsunami...
+[2026-02-26T08:15:18.192+0000] {local_task_job_runner.py:121} ERROR - Received SIGTERM. Terminating subprocesses
+[2026-02-26T08:15:18.200+0000] {process_utils.py:131} INFO - Sending 15 to group 168. PIDs of all processes in the group: [168]
+[2026-02-26T08:15:18.201+0000] {process_utils.py:86} INFO - Sending the signal 15 to group 168
+[2026-02-26T08:15:18.203+0000] {taskinstance.py:2450} ERROR - Received SIGTERM. Terminating subprocesses.
+[2026-02-26T08:15:18.225+0000] {taskinstance.py:2698} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 433, in _execute_task
+    result = execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 199, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 216, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/src/gulia_part.py", line 49, in extract_all_noaa
+    extract_noaa_generic('tsunami', 'tsunamis_raw')
+  File "/opt/airflow/src/gulia_part.py", line 44, in extract_noaa_generic
+    df = pd.DataFrame(all_items)
+  File "/home/airflow/.local/lib/python3.8/site-packages/pandas/core/frame.py", line 790, in __init__
+    mgr = arrays_to_mgr(
+  File "/home/airflow/.local/lib/python3.8/site-packages/pandas/core/internals/construction.py", line 153, in arrays_to_mgr
+    return create_block_manager_from_column_arrays(
+  File "/home/airflow/.local/lib/python3.8/site-packages/pandas/core/internals/managers.py", line 2142, in create_block_manager_from_column_arrays
+    mgr._consolidate_inplace()
+  File "/home/airflow/.local/lib/python3.8/site-packages/pandas/core/internals/managers.py", line 1829, in _consolidate_inplace
+    self.blocks = _consolidate(self.blocks)
+  File "/home/airflow/.local/lib/python3.8/site-packages/pandas/core/internals/managers.py", line 2272, in _consolidate
+    merged_blocks, _ = _merge_blocks(
+  File "/home/airflow/.local/lib/python3.8/site-packages/pandas/core/internals/managers.py", line 2297, in _merge_blocks
+    new_values = np.vstack([b.values for b in blocks])  # type: ignore[misc]
+  File "<__array_function__ internals>", line 200, in vstack
+  File "/home/airflow/.local/lib/python3.8/site-packages/numpy/core/shape_base.py", line 296, in vstack
+    return _nx.concatenate(arrs, 0, dtype=dtype, casting=casting)
+  File "<__array_function__ internals>", line 200, in concatenate
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 2452, in signal_handler
+    raise AirflowException("Task received SIGTERM signal")
+airflow.exceptions.AirflowException: Task received SIGTERM signal
+[2026-02-26T08:15:18.246+0000] {taskinstance.py:1138} INFO - Marking task as FAILED. dag_id=risk_analysis_v1, task_id=extract_noaa_all, execution_date=20260226T081306, start_date=20260226T081309, end_date=20260226T081518
+[2026-02-26T08:15:18.291+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 2 for task extract_noaa_all (Task received SIGTERM signal; 168)
+[2026-02-26T08:15:18.339+0000] {process_utils.py:79} INFO - Process psutil.Process(pid=168, status='terminated', exitcode=1, started='08:13:09') (168) terminated with exit code 1
+[2026-02-26T08:15:18.341+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 143
+[2026-02-26T08:15:18.389+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check

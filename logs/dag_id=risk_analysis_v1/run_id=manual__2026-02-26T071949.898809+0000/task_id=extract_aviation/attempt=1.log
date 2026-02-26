@@ -1,0 +1,15 @@
+[2026-02-26T07:19:52.668+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: risk_analysis_v1.extract_aviation manual__2026-02-26T07:19:49.898809+00:00 [queued]>
+[2026-02-26T07:19:52.685+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: risk_analysis_v1.extract_aviation manual__2026-02-26T07:19:49.898809+00:00 [queued]>
+[2026-02-26T07:19:52.686+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 1
+[2026-02-26T07:19:52.718+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): extract_aviation> on 2026-02-26 07:19:49.898809+00:00
+[2026-02-26T07:19:52.734+0000] {standard_task_runner.py:60} INFO - Started process 169 to run task
+[2026-02-26T07:19:52.741+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'risk_analysis_v1', 'extract_aviation', 'manual__2026-02-26T07:19:49.898809+00:00', '--job-id', '2', '--raw', '--subdir', 'DAGS_FOLDER/pipeline.py', '--cfg-path', '/tmp/tmp6jfang50']
+[2026-02-26T07:19:52.747+0000] {standard_task_runner.py:88} INFO - Job 2: Subtask extract_aviation
+[2026-02-26T07:19:52.840+0000] {task_command.py:423} INFO - Running <TaskInstance: risk_analysis_v1.extract_aviation manual__2026-02-26T07:19:49.898809+00:00 [running]> on host 76b9c9e4c019
+[2026-02-26T07:19:52.973+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='risk_analysis_v1' AIRFLOW_CTX_TASK_ID='extract_aviation' AIRFLOW_CTX_EXECUTION_DATE='2026-02-26T07:19:49.898809+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-02-26T07:19:49.898809+00:00'
+[2026-02-26T07:19:52.976+0000] {gulia_part.py:53} INFO - Парсинг Aviation Safety: https://aviation-safety.net/database/year/2024/1...
+[2026-02-26T07:19:55.793+0000] {s3_tools.py:46} INFO - ✅ Uploaded CSV to s3://jasonstatham/raw/aircraft/aviation_safety_raw.csv
+[2026-02-26T07:19:55.800+0000] {python.py:201} INFO - Done. Returned value was: None
+[2026-02-26T07:19:55.818+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=risk_analysis_v1, task_id=extract_aviation, execution_date=20260226T071949, start_date=20260226T071952, end_date=20260226T071955
+[2026-02-26T07:19:55.891+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-02-26T07:19:55.936+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check

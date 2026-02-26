@@ -1,0 +1,24 @@
+[2026-02-26T08:33:10.323+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: risk_analysis_v1.train_gradient_boosting manual__2026-02-26T08:32:56.878795+00:00 [queued]>
+[2026-02-26T08:33:10.339+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: risk_analysis_v1.train_gradient_boosting manual__2026-02-26T08:32:56.878795+00:00 [queued]>
+[2026-02-26T08:33:10.341+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 1
+[2026-02-26T08:33:10.363+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): train_gradient_boosting> on 2026-02-26 08:32:56.878795+00:00
+[2026-02-26T08:33:10.375+0000] {standard_task_runner.py:60} INFO - Started process 269 to run task
+[2026-02-26T08:33:10.379+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'risk_analysis_v1', 'train_gradient_boosting', 'manual__2026-02-26T08:32:56.878795+00:00', '--job-id', '6', '--raw', '--subdir', 'DAGS_FOLDER/pipeline.py', '--cfg-path', '/tmp/tmp0cfee64x']
+[2026-02-26T08:33:10.384+0000] {standard_task_runner.py:88} INFO - Job 6: Subtask train_gradient_boosting
+[2026-02-26T08:33:10.470+0000] {task_command.py:423} INFO - Running <TaskInstance: risk_analysis_v1.train_gradient_boosting manual__2026-02-26T08:32:56.878795+00:00 [running]> on host 8c775956fb74
+[2026-02-26T08:33:10.602+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='risk_analysis_v1' AIRFLOW_CTX_TASK_ID='train_gradient_boosting' AIRFLOW_CTX_EXECUTION_DATE='2026-02-26T08:32:56.878795+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-02-26T08:32:56.878795+00:00'
+[2026-02-26T08:33:10.608+0000] {etl_logic.py:24} INFO - Reading local CSV...
+[2026-02-26T08:33:11.444+0000] {etl_logic.py:37} INFO - Fetching World Bank Data...
+[2026-02-26T08:33:12.997+0000] {etl_logic.py:46} INFO - ETL Complete. Rows: 27508
+[2026-02-26T08:33:13.003+0000] {ml_logic.py:15} INFO - Начинаем подготовку данных для модели: gb
+[2026-02-26T08:33:13.065+0000] {ml_logic.py:44} INFO - Обучение модели...
+[2026-02-26T08:33:15.167+0000] {ml_logic.py:52} INFO - ==========================================
+[2026-02-26T08:33:15.168+0000] {ml_logic.py:53} INFO - РЕЗУЛЬТАТЫ МОДЕЛИ GB:
+[2026-02-26T08:33:15.169+0000] {ml_logic.py:54} INFO - Точность (Accuracy): 87.24%
+[2026-02-26T08:33:15.170+0000] {ml_logic.py:55} INFO - ==========================================
+[2026-02-26T08:33:17.271+0000] {s3_tools.py:53} INFO - ✅ Uploaded model to s3://jasonstatham/models/gb_classifier.joblib
+[2026-02-26T08:33:18.358+0000] {s3_tools.py:53} INFO - ✅ Uploaded model to s3://jasonstatham/models/gb_columns.joblib
+[2026-02-26T08:33:18.372+0000] {python.py:201} INFO - Done. Returned value was: None
+[2026-02-26T08:33:18.398+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=risk_analysis_v1, task_id=train_gradient_boosting, execution_date=20260226T083256, start_date=20260226T083310, end_date=20260226T083318
+[2026-02-26T08:33:18.503+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-02-26T08:33:18.530+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check

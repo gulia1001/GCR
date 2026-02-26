@@ -5,7 +5,6 @@ import pandas as pd
 import logging
 
 def get_s3_client():
-    # Используем getenv(..., '') чтобы избежать ошибки .strip(), если переменной нет
     access_key = os.getenv('AWS_ACCESS_KEY_ID', '').strip()
     secret_key = os.getenv('AWS_SECRET_ACCESS_KEY', '').strip()
     token = os.getenv('AWS_SESSION_TOKEN')
@@ -67,17 +66,5 @@ def read_csv_from_s3(key, **kwargs):
     
     logging.info(f"Чтение CSV из s3://{bucket}/{key}...")
     response = s3.get_object(Bucket=bucket, Key=key)
-    # Декодируем байты в строку для Pandas
     file_content = response['Body'].read().decode('utf-8') 
     return pd.read_csv(io.StringIO(file_content), **kwargs)
-
-def read_excel_from_s3(key, **kwargs):
-    """Читает Excel из S3 через boto3"""
-    s3 = get_s3_client()
-    bucket = get_bucket_name()
-    
-    logging.info(f"Чтение Excel из s3://{bucket}/{key}...")
-    response = s3.get_object(Bucket=bucket, Key=key)
-    # Читаем байты напрямую в BytesIO для Excel
-    file_obj = response['Body'].read()
-    return pd.read_excel(io.BytesIO(file_obj), **kwargs)
