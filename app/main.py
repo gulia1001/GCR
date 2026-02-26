@@ -49,10 +49,10 @@ try:
     df = load_data()
     
     st.sidebar.header("Фильтры")
-    years = st.sidebar.slider("Период", int(df['Year'].min()), int(df['Year'].max()), (2010, 2026))
+    years = st.sidebar.slider("Период", int(df['Start Year'].min()), int(df['Start Year'].max()), (2010, 2026))
     types = st.sidebar.multiselect("Тип катастрофы", df['Disaster Type'].unique())
     
-    mask = (df['Year'].between(years[0], years[1]))
+    mask = (df['Start Year'].between(years[0], years[1]))
     if types:
         mask = mask & (df['Disaster Type'].isin(types))
     filtered_df = df[mask]
@@ -63,19 +63,23 @@ try:
         c1, c2, c3 = st.columns(3)
         c1.metric("Всего событий", len(filtered_df))
         c2.metric("Пострадало людей", f"{filtered_df['Total Affected'].sum():,.0f}")
-        c3.metric("Ущерб (USD)", f"${filtered_df['Total Damage (USD, adjusted)'].sum()/1e9:.1f} B")
+        # 1. Сначала считаем сумму и переводим в миллиарды
+        total_damage_b = filtered_df["Total Damage, Adjusted ('000 US$)"].sum() / 1e9
+        
+        # 2. Затем красиво выводим в метрику (никакого конфликта кавычек!)
+        c3.metric("Ущерб (USD)", f"${total_damage_b:.1f} B")
         
         col_chart1, col_chart2 = st.columns(2)
         with col_chart1:
             st.subheader("Динамика по годам")
-            ev_per_year = filtered_df.groupby('Year')['Total Events'].sum().reset_index()
-            fig = px.bar(ev_per_year, x='Year', y='Total Events')
+            ev_per_year = filtered_df.groupby('Start Year')['Total Events'].sum().reset_index()
+            fig = px.bar(ev_per_year, x='Start Year', y='Total Events')
             st.plotly_chart(fig, use_container_width=True)
             
         with col_chart2:
             st.subheader("Карта ущерба")
             fig_map = px.choropleth(
-                filtered_df, locations="ISO", color="Total Damage (USD, adjusted)",
+                filtered_df, locations="ISO", color="Total Damage ('000 US$)",
                 hover_name="Country", color_continuous_scale="Reds"
             )
             st.plotly_chart(fig_map, use_container_width=True)
@@ -101,7 +105,7 @@ try:
             
             input_data = pd.DataFrame(0, index=[0], columns=model_cols)
             input_data['GDP'] = sim_gdp
-            input_data['Year'] = 2026
+            input_data['Start Year'] = 2026
             
             type_col = f"Type_{sim_type}"
             if type_col in input_data.columns:

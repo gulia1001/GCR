@@ -1,0 +1,17 @@
+[2026-02-26T01:50:12.184+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: risk_analysis_v1.prep_map manual__2026-02-26T01:50:09.526253+00:00 [queued]>
+[2026-02-26T01:50:12.196+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: risk_analysis_v1.prep_map manual__2026-02-26T01:50:09.526253+00:00 [queued]>
+[2026-02-26T01:50:12.197+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 1
+[2026-02-26T01:50:12.218+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): prep_map> on 2026-02-26 01:50:09.526253+00:00
+[2026-02-26T01:50:12.229+0000] {standard_task_runner.py:60} INFO - Started process 191 to run task
+[2026-02-26T01:50:12.235+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'risk_analysis_v1', 'prep_map', 'manual__2026-02-26T01:50:09.526253+00:00', '--job-id', '2', '--raw', '--subdir', 'DAGS_FOLDER/pipeline.py', '--cfg-path', '/tmp/tmpwscij43l']
+[2026-02-26T01:50:12.241+0000] {standard_task_runner.py:88} INFO - Job 2: Subtask prep_map
+[2026-02-26T01:50:12.346+0000] {task_command.py:423} INFO - Running <TaskInstance: risk_analysis_v1.prep_map manual__2026-02-26T01:50:09.526253+00:00 [running]> on host 7cb9054393e5
+[2026-02-26T01:50:12.486+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='risk_analysis_v1' AIRFLOW_CTX_TASK_ID='prep_map' AIRFLOW_CTX_EXECUTION_DATE='2026-02-26T01:50:09.526253+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-02-26T01:50:09.526253+00:00'
+[2026-02-26T01:50:12.489+0000] {etl_logic.py:24} INFO - Reading local CSV...
+[2026-02-26T01:50:13.556+0000] {etl_logic.py:37} INFO - Fetching World Bank Data...
+[2026-02-26T01:50:15.403+0000] {etl_logic.py:46} INFO - ETL Complete. Rows: 27508
+[2026-02-26T01:50:19.586+0000] {s3_tools.py:36} INFO - ✅ Uploaded Parquet to s3://jasonstatham/data/processed_risk_data.parquet
+[2026-02-26T01:50:19.599+0000] {python.py:201} INFO - Done. Returned value was: None
+[2026-02-26T01:50:19.615+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=risk_analysis_v1, task_id=prep_map, execution_date=20260226T015009, start_date=20260226T015012, end_date=20260226T015019
+[2026-02-26T01:50:19.663+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-02-26T01:50:19.691+0000] {taskinstance.py:3280} INFO - 3 downstream tasks scheduled from follow-on schedule check

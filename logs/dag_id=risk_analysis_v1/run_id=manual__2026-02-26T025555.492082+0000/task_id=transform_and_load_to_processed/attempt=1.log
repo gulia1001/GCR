@@ -1,0 +1,36 @@
+[2026-02-26T02:59:16.296+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: risk_analysis_v1.transform_and_load_to_processed manual__2026-02-26T02:55:55.492082+00:00 [queued]>
+[2026-02-26T02:59:16.310+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: risk_analysis_v1.transform_and_load_to_processed manual__2026-02-26T02:55:55.492082+00:00 [queued]>
+[2026-02-26T02:59:16.312+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 1
+[2026-02-26T02:59:16.336+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): transform_and_load_to_processed> on 2026-02-26 02:55:55.492082+00:00
+[2026-02-26T02:59:16.352+0000] {standard_task_runner.py:60} INFO - Started process 435 to run task
+[2026-02-26T02:59:16.357+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'risk_analysis_v1', 'transform_and_load_to_processed', 'manual__2026-02-26T02:55:55.492082+00:00', '--job-id', '8', '--raw', '--subdir', 'DAGS_FOLDER/pipeline.py', '--cfg-path', '/tmp/tmp5ajbmhzn']
+[2026-02-26T02:59:16.361+0000] {standard_task_runner.py:88} INFO - Job 8: Subtask transform_and_load_to_processed
+[2026-02-26T02:59:16.444+0000] {task_command.py:423} INFO - Running <TaskInstance: risk_analysis_v1.transform_and_load_to_processed manual__2026-02-26T02:55:55.492082+00:00 [running]> on host 602a9989baaa
+[2026-02-26T02:59:16.551+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='risk_analysis_v1' AIRFLOW_CTX_TASK_ID='transform_and_load_to_processed' AIRFLOW_CTX_EXECUTION_DATE='2026-02-26T02:55:55.492082+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-02-26T02:55:55.492082+00:00'
+[2026-02-26T02:59:16.554+0000] {gulia_part.py:195} INFO - Чтение сырых данных...
+[2026-02-26T02:59:16.555+0000] {gulia_part.py:199} INFO - Поиск EM-DAT в S3...
+[2026-02-26T02:59:16.974+0000] {s3_tools.py:68} INFO - Чтение CSV из s3://jasonstatham/raw/emdat.csv...
+[2026-02-26T02:59:26.448+0000] {logging_mixin.py:188} INFO - ТАК ЗДЕСЬ ВРОДЕ ВСЕ НОРМ ЕСЛИ МЕНЯ НЕТУ ТЕБЕ ПИЗДЕС
+[2026-02-26T02:59:26.449+0000] {gulia_part.py:207} INFO - Поиск GTD в S3...
+[2026-02-26T02:59:26.460+0000] {s3_tools.py:68} INFO - Чтение CSV из s3://jasonstatham/raw/gtd.csv...
+[2026-02-26T02:59:36.764+0000] {s3_tools.py:68} INFO - Чтение CSV из s3://jasonstatham/raw/noaa/earthquakes_raw.csv...
+[2026-02-26T02:59:39.769+0000] {s3_tools.py:68} INFO - Чтение CSV из s3://jasonstatham/raw/noaa/tsunamis_raw.csv...
+[2026-02-26T02:59:41.576+0000] {s3_tools.py:68} INFO - Чтение CSV из s3://jasonstatham/raw/noaa/volcanoes_raw.csv...
+[2026-02-26T02:59:43.141+0000] {s3_tools.py:68} INFO - Чтение CSV из s3://jasonstatham/raw/aircraft/aviation_safety_raw.csv...
+[2026-02-26T02:59:44.391+0000] {taskinstance.py:2698} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 433, in _execute_task
+    result = execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 199, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 216, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/src/gulia_part.py", line 220, in transform_and_load_processed
+    clean_emdat = transform_emdat(raw_emdat)
+  File "/opt/airflow/src/gulia_part.py", line 131, in transform_emdat
+    'Country': df.get('Country', 'Unknown').astype(str),
+AttributeError: 'str' object has no attribute 'astype'
+[2026-02-26T02:59:44.427+0000] {taskinstance.py:1138} INFO - Marking task as FAILED. dag_id=risk_analysis_v1, task_id=transform_and_load_to_processed, execution_date=20260226T025555, start_date=20260226T025916, end_date=20260226T025944
+[2026-02-26T02:59:44.451+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 8 for task transform_and_load_to_processed ('str' object has no attribute 'astype'; 435)
+[2026-02-26T02:59:44.507+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2026-02-26T02:59:44.535+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check

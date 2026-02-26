@@ -1,0 +1,24 @@
+[2026-02-26T03:06:44.662+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: risk_analysis_v1.train_logistic_regression manual__2026-02-26T03:06:30.911634+00:00 [queued]>
+[2026-02-26T03:06:44.678+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: risk_analysis_v1.train_logistic_regression manual__2026-02-26T03:06:30.911634+00:00 [queued]>
+[2026-02-26T03:06:44.680+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 1
+[2026-02-26T03:06:44.706+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): train_logistic_regression> on 2026-02-26 03:06:30.911634+00:00
+[2026-02-26T03:06:44.743+0000] {standard_task_runner.py:60} INFO - Started process 243 to run task
+[2026-02-26T03:06:44.747+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'risk_analysis_v1', 'train_logistic_regression', 'manual__2026-02-26T03:06:30.911634+00:00', '--job-id', '7', '--raw', '--subdir', 'DAGS_FOLDER/pipeline.py', '--cfg-path', '/tmp/tmpj1bm8j8o']
+[2026-02-26T03:06:44.752+0000] {standard_task_runner.py:88} INFO - Job 7: Subtask train_logistic_regression
+[2026-02-26T03:06:44.847+0000] {task_command.py:423} INFO - Running <TaskInstance: risk_analysis_v1.train_logistic_regression manual__2026-02-26T03:06:30.911634+00:00 [running]> on host 84283308fd9b
+[2026-02-26T03:06:44.991+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='risk_analysis_v1' AIRFLOW_CTX_TASK_ID='train_logistic_regression' AIRFLOW_CTX_EXECUTION_DATE='2026-02-26T03:06:30.911634+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-02-26T03:06:30.911634+00:00'
+[2026-02-26T03:06:44.995+0000] {etl_logic.py:24} INFO - Reading local CSV...
+[2026-02-26T03:06:45.853+0000] {etl_logic.py:37} INFO - Fetching World Bank Data...
+[2026-02-26T03:06:47.163+0000] {etl_logic.py:46} INFO - ETL Complete. Rows: 27508
+[2026-02-26T03:06:47.168+0000] {ml_logic.py:15} INFO - Начинаем подготовку данных для модели: lr
+[2026-02-26T03:06:47.224+0000] {ml_logic.py:44} INFO - Обучение модели...
+[2026-02-26T03:06:48.281+0000] {ml_logic.py:52} INFO - ==========================================
+[2026-02-26T03:06:48.292+0000] {ml_logic.py:53} INFO - РЕЗУЛЬТАТЫ МОДЕЛИ LR:
+[2026-02-26T03:06:48.297+0000] {ml_logic.py:54} INFO - Точность (Accuracy): 86.90%
+[2026-02-26T03:06:48.297+0000] {ml_logic.py:55} INFO - ==========================================
+[2026-02-26T03:06:49.760+0000] {s3_tools.py:54} INFO - ✅ Uploaded model to s3://jasonstatham/models/lr_classifier.joblib
+[2026-02-26T03:06:50.946+0000] {s3_tools.py:54} INFO - ✅ Uploaded model to s3://jasonstatham/models/lr_columns.joblib
+[2026-02-26T03:06:50.964+0000] {python.py:201} INFO - Done. Returned value was: None
+[2026-02-26T03:06:50.987+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=risk_analysis_v1, task_id=train_logistic_regression, execution_date=20260226T030630, start_date=20260226T030644, end_date=20260226T030650
+[2026-02-26T03:06:51.044+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-02-26T03:06:51.066+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check

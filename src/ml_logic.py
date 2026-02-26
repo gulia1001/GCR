@@ -15,7 +15,7 @@ def train_risk_model(df, model_type='rf'):
     logging.info(f"Начинаем подготовку данных для модели: {model_type}")
     
     df['Is_High_Risk'] = ((df['Total Deaths'] > 100) | (df['Total Affected'] > 1000000)).astype(int)
-    features = ['Year', 'GDP']
+    features = ['Start Year', 'GDP']
     
     if 'Disaster Type' in df.columns:
         df_encoded = pd.get_dummies(df, columns=['Disaster Type'], prefix='Type')

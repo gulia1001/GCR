@@ -1,0 +1,19 @@
+[2026-02-26T01:50:12.224+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: risk_analysis_v1.extract_noaa_all manual__2026-02-26T01:50:09.526253+00:00 [queued]>
+[2026-02-26T01:50:12.240+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: risk_analysis_v1.extract_noaa_all manual__2026-02-26T01:50:09.526253+00:00 [queued]>
+[2026-02-26T01:50:12.241+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 1
+[2026-02-26T01:50:12.270+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): extract_noaa_all> on 2026-02-26 01:50:09.526253+00:00
+[2026-02-26T01:50:12.282+0000] {standard_task_runner.py:60} INFO - Started process 193 to run task
+[2026-02-26T01:50:12.291+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'risk_analysis_v1', 'extract_noaa_all', 'manual__2026-02-26T01:50:09.526253+00:00', '--job-id', '4', '--raw', '--subdir', 'DAGS_FOLDER/pipeline.py', '--cfg-path', '/tmp/tmptlat4fe0']
+[2026-02-26T01:50:12.299+0000] {standard_task_runner.py:88} INFO - Job 4: Subtask extract_noaa_all
+[2026-02-26T01:50:12.407+0000] {task_command.py:423} INFO - Running <TaskInstance: risk_analysis_v1.extract_noaa_all manual__2026-02-26T01:50:09.526253+00:00 [running]> on host 7cb9054393e5
+[2026-02-26T01:50:12.534+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='risk_analysis_v1' AIRFLOW_CTX_TASK_ID='extract_noaa_all' AIRFLOW_CTX_EXECUTION_DATE='2026-02-26T01:50:09.526253+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-02-26T01:50:09.526253+00:00'
+[2026-02-26T01:50:12.537+0000] {gulia_part.py:33} INFO - Начинаем выгрузку NOAA: earthquake...
+[2026-02-26T01:51:37.740+0000] {s3_tools.py:47} INFO - ✅ Uploaded CSV to s3://jasonstatham/raw/noaa/earthquakes_raw.csv
+[2026-02-26T01:51:37.757+0000] {gulia_part.py:33} INFO - Начинаем выгрузку NOAA: tsunami...
+[2026-02-26T01:52:34.676+0000] {s3_tools.py:47} INFO - ✅ Uploaded CSV to s3://jasonstatham/raw/noaa/tsunamis_raw.csv
+[2026-02-26T01:52:34.688+0000] {gulia_part.py:33} INFO - Начинаем выгрузку NOAA: volcano...
+[2026-02-26T01:52:47.022+0000] {s3_tools.py:47} INFO - ✅ Uploaded CSV to s3://jasonstatham/raw/noaa/volcanoes_raw.csv
+[2026-02-26T01:52:47.037+0000] {python.py:201} INFO - Done. Returned value was: None
+[2026-02-26T01:52:47.060+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=risk_analysis_v1, task_id=extract_noaa_all, execution_date=20260226T015009, start_date=20260226T015012, end_date=20260226T015247
+[2026-02-26T01:52:47.123+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-02-26T01:52:47.159+0000] {taskinstance.py:3280} INFO - 1 downstream tasks scheduled from follow-on schedule check

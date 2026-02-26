@@ -1,0 +1,45 @@
+[2026-02-26T01:55:31.309+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: risk_analysis_v1.transform_and_load_to_processed manual__2026-02-26T01:50:50.734400+00:00 [queued]>
+[2026-02-26T01:55:31.320+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: risk_analysis_v1.transform_and_load_to_processed manual__2026-02-26T01:50:50.734400+00:00 [queued]>
+[2026-02-26T01:55:31.321+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 1
+[2026-02-26T01:55:31.348+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): transform_and_load_to_processed> on 2026-02-26 01:50:50.734400+00:00
+[2026-02-26T01:55:31.362+0000] {standard_task_runner.py:60} INFO - Started process 734 to run task
+[2026-02-26T01:55:31.367+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'risk_analysis_v1', 'transform_and_load_to_processed', 'manual__2026-02-26T01:50:50.734400+00:00', '--job-id', '15', '--raw', '--subdir', 'DAGS_FOLDER/pipeline.py', '--cfg-path', '/tmp/tmpx890e_t6']
+[2026-02-26T01:55:31.372+0000] {standard_task_runner.py:88} INFO - Job 15: Subtask transform_and_load_to_processed
+[2026-02-26T01:55:31.442+0000] {task_command.py:423} INFO - Running <TaskInstance: risk_analysis_v1.transform_and_load_to_processed manual__2026-02-26T01:50:50.734400+00:00 [running]> on host 7cb9054393e5
+[2026-02-26T01:55:31.545+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='risk_analysis_v1' AIRFLOW_CTX_TASK_ID='transform_and_load_to_processed' AIRFLOW_CTX_EXECUTION_DATE='2026-02-26T01:50:50.734400+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-02-26T01:50:50.734400+00:00'
+[2026-02-26T01:55:31.548+0000] {gulia_part.py:174} INFO - Чтение сырых данных...
+[2026-02-26T01:55:31.549+0000] {gulia_part.py:178} INFO - Поиск EM-DAT в S3...
+[2026-02-26T01:55:31.943+0000] {s3_tools.py:79} INFO - Чтение Excel из s3://jasonstatham/raw/emdat/emdat.csv...
+[2026-02-26T01:55:32.928+0000] {gulia_part.py:181} WARNING - Файл EM-DAT в S3 не найден. Читаем локально: An error occurred (NoSuchKey) when calling the GetObject operation: The specified key does not exist.
+[2026-02-26T01:55:32.934+0000] {taskinstance.py:2698} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/opt/airflow/src/gulia_part.py", line 179, in transform_and_load_processed
+    raw_emdat = read_excel_from_s3("raw/emdat/emdat.csv", skiprows=6)
+  File "/opt/airflow/src/s3_tools.py", line 80, in read_excel_from_s3
+    response = s3.get_object(Bucket=bucket, Key=key)
+  File "/home/airflow/.local/lib/python3.8/site-packages/botocore/client.py", line 553, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/botocore/client.py", line 1009, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.errorfactory.NoSuchKey: An error occurred (NoSuchKey) when calling the GetObject operation: The specified key does not exist.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 433, in _execute_task
+    result = execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 199, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 216, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/src/gulia_part.py", line 182, in transform_and_load_processed
+    raw_emdat = pd.read_excel("/opt/airflow/data/emdat.csv", skiprows=6)
+  File "/home/airflow/.local/lib/python3.8/site-packages/pandas/io/excel/_base.py", line 478, in read_excel
+    io = ExcelFile(io, storage_options=storage_options, engine=engine)
+  File "/home/airflow/.local/lib/python3.8/site-packages/pandas/io/excel/_base.py", line 1500, in __init__
+    raise ValueError(
+ValueError: Excel file format cannot be determined, you must specify an engine manually.
+[2026-02-26T01:55:32.967+0000] {taskinstance.py:1138} INFO - Marking task as FAILED. dag_id=risk_analysis_v1, task_id=transform_and_load_to_processed, execution_date=20260226T015050, start_date=20260226T015531, end_date=20260226T015532
+[2026-02-26T01:55:33.021+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 15 for task transform_and_load_to_processed (Excel file format cannot be determined, you must specify an engine manually.; 734)
+[2026-02-26T01:55:33.073+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2026-02-26T01:55:33.100+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check
